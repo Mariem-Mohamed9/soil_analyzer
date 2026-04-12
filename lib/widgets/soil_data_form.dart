@@ -4,7 +4,13 @@ import '../widgets/app_theme.dart';
 class SoilDataForm extends StatefulWidget {
   final Function(String color, String moisture, String ph) onSubmit;
 
-  const SoilDataForm({super.key, required this.onSubmit});
+  final bool showColor;
+
+  const SoilDataForm({
+    super.key,
+    required this.onSubmit,
+    this.showColor = true,
+  });
 
   @override
   State<SoilDataForm> createState() => _SoilDataFormState();
@@ -15,11 +21,7 @@ class _SoilDataFormState extends State<SoilDataForm> {
 
   String selectedColor = "Select Color";
 
-  List<String> soilColors = [
-    "Yellow",
-    "Brown",
-    "Black"
-  ];
+  List<String> soilColors = ["Yellow", "Brown", "Black"];
 
   TextEditingController moistureController = TextEditingController();
   TextEditingController phController = TextEditingController();
@@ -35,45 +37,53 @@ class _SoilDataFormState extends State<SoilDataForm> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
-              /// Soil Color
-              Text("Soil Color",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-
-              SizedBox(height: 8),
-
-              DropdownButtonFormField<String>(
-                value: selectedColor == "Select Color" ? null : selectedColor,
-                isExpanded: true,
-                icon: Icon(Icons.keyboard_arrow_down),
-                items: soilColors.map((color) {
-                  return DropdownMenuItem(
-                    value: color,
-                    child: Text(color),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedColor = value!;
-                  });
-                },
-                decoration: InputDecoration(
-                  labelText:
-                  selectedColor == "Select Color" ? "Select Color" : null,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
+              ///  Soil Color (يتعرض حسب الشرط)
+              if (widget.showColor) ...[
+                Text(
+                  "Soil Color",
+                  style: TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-              ),
 
-              SizedBox(height: 20),
+                SizedBox(height: 8),
+
+                DropdownButtonFormField<String>(
+                  value:
+                  selectedColor == "Select Color" ? null : selectedColor,
+                  isExpanded: true,
+                  icon: Icon(Icons.keyboard_arrow_down),
+                  items: soilColors.map((color) {
+                    return DropdownMenuItem(
+                      value: color,
+                      child: Text(color),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedColor = value!;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    labelText: "Select Color",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (widget.showColor && value == null) {
+                      return "Select a color";
+                    }
+                    return null;
+                  },
+                ),
+
+                SizedBox(height: 20),
+              ],
 
               /// Moisture
               Text("Moisture %",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  style: TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold)),
 
               SizedBox(height: 8),
 
@@ -101,7 +111,8 @@ class _SoilDataFormState extends State<SoilDataForm> {
 
               /// pH
               Text("pH Value",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  style: TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold)),
 
               SizedBox(height: 8),
 
@@ -127,7 +138,7 @@ class _SoilDataFormState extends State<SoilDataForm> {
 
               SizedBox(height: 30),
 
-              /// Submit Button (يرجع البيانات للصفحة الأساسية)
+              /// Submit Button
               SizedBox(
                 width: double.infinity,
                 height: 55,
@@ -135,7 +146,8 @@ class _SoilDataFormState extends State<SoilDataForm> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTheme.primary,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14)),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
                   ),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
@@ -146,11 +158,14 @@ class _SoilDataFormState extends State<SoilDataForm> {
                       );
                     }
                   },
-                  child: Text("Start Analysis",
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white)),
+                  child: Text(
+                    "Start Analysis",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
             ],
