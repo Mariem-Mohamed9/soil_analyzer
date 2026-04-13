@@ -2,7 +2,10 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:soil_analyzer/screens/soil_result_screen.dart';
 
+import '../models/soil_result_model.dart';
 import '../widgets/app_theme.dart';
 import '../widgets/soil_data_form.dart';
 
@@ -21,7 +24,6 @@ class _SoilConfirmationScreenState extends State<SoilConfirmationScreen> {
 
   bool isLoading = false;
 
-  /// 🚀 API CALL (Image Mode)
   Future<void> sendToApi(String moisture, String ph) async {
     setState(() {
       isLoading = true;
@@ -33,53 +35,69 @@ class _SoilConfirmationScreenState extends State<SoilConfirmationScreen> {
         Uri.parse("https://web-production-a55511.up.railway.app/predict"),
       );
 
+      // إضافة البيانات
       request.fields["moisture"] = moisture;
       request.fields["ph"] = ph;
-
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          "image",
-          widget.image.path,
-        ),
-      );
+      request.files.add(await http.MultipartFile.fromPath("image", widget.image.path));
 
       var response = await request.send();
       var result = await response.stream.bytesToString();
-
       final data = jsonDecode(result);
+      print("Full API Response: $data");
 
       setState(() {
         isLoading = false;
       });
 
-      showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: Text("Result"),
-          content: Text(
-            "Soil Type: ${data['soil_type']}\n"
-                "Quality: ${data['soil_quality']}\n"
-                "Crop: ${data['crop']}",
+      if (response.statusCode == 200) {
+
+
+        String detectedType = data['soil_type'] ?? "Unknown";
+
+        String detectedColor;
+        if (detectedType == "Clay") {
+          detectedColor = "Black";
+        } else if (detectedType == "Sand") {
+          detectedColor = "Yellow";
+        } else {
+          detectedColor = "Brown";
+        }
+
+        final finalResult = SoilResultData(
+          image: widget.image,
+          soilType: detectedType,
+          color: detectedColor,
+
+
+          ph: data['ph']?.toString() ?? ph,
+          moisture: data['moisture']?.toString() ?? moisture,
+
+
+          quality: data['soil_quality'] ?? "N/A",
+
+          bestCrops: data['best_crops'] is List
+              ? List<String>.from(data['best_crops'])
+              : [data['crop']?.toString() ?? "N/A"],
+
+          dateTime: DateFormat('dd/MM/yyyy - hh:mm a').format(DateTime.now()),
+        );
+
+
+        if (!mounted) return;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SoilResultScreen(result: finalResult),
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("OK"),
-            )
-          ],
-        ),
-      );
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
+        );
+      } else {
+        throw Exception("Server Error: ${response.statusCode}");
+      }
 
-      showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: Text("Error"),
-          content: Text(e.toString()),
-        ),
+    } catch (e) {
+      setState(() => isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: ${e.toString()}")),
       );
     }
   }
@@ -144,7 +162,6 @@ class _SoilConfirmationScreenState extends State<SoilConfirmationScreen> {
 
                       const SizedBox(height: 30),
 
-                      /// 📸 عرض الصورة
                       Row(
                         children: [
                           const Text(
@@ -169,9 +186,9 @@ class _SoilConfirmationScreenState extends State<SoilConfirmationScreen> {
                   ),
                 ),
 
-                /// 🔥 الفورم بدون Color
+
                 SoilDataForm(
-                  showColor: false, // لازم تكوني ضفتيها في الفورم
+                  showColor: false,
                   onSubmit: (color, moisture, ph) {
                     sendToApi(moisture, ph);
                   },
@@ -180,7 +197,7 @@ class _SoilConfirmationScreenState extends State<SoilConfirmationScreen> {
             ),
           ),
 
-          /// 🔥 Loading Overlay
+
           if (isLoading)
             Container(
               color: Colors.black.withOpacity(0.4),
