@@ -15,9 +15,9 @@ class _SoilResultScreenState extends State<SoilResultScreen> {
   @override
   void initState() {
     super.initState();
-    // ✅ أول ما الصفحة تفتح، بنشوف لو السيرفر قال إنها موجودة قبل كدة
+
     if (widget.result.isExist) {
-      // بنستخدم Future.delayed عشان نضمن إن الـ UI اترسم قبل ما نطلع الـ SnackBar
+
       Future.delayed(Duration.zero, () {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -57,7 +57,7 @@ class _SoilResultScreenState extends State<SoilResultScreen> {
             ),
             const SizedBox(height: 30),
 
-            // عرض الصورة
+
             if (widget.result.image != null || (widget.result.imageUrl != null && widget.result.imageUrl!.isNotEmpty))
               Padding(
                 padding: const EdgeInsets.only(bottom: 30),
@@ -106,7 +106,7 @@ class _SoilResultScreenState extends State<SoilResultScreen> {
 
             const SizedBox(height: 40),
 
-            // زرار الرجوع للهوم
+
             ElevatedButton(
               onPressed: () => Navigator.pushNamedAndRemoveUntil(
                   context, "/home", (route) => false),
@@ -122,12 +122,12 @@ class _SoilResultScreenState extends State<SoilResultScreen> {
 
             const SizedBox(height: 15),
 
-            // ✅ زرار الحفظ المعدل
+
             OutlinedButton(
               onPressed: widget.result.isExist
-                  ? null // يتطفي لو موجودة فعلاً
+                  ? null
                   : () {
-                // كود الحفظ لو محتاجة تنادي API معين، بس حالياً السيرفر حفظها تلقائي
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("Saved to history successfully!")),
                 );
