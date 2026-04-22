@@ -18,7 +18,7 @@ class _AboutScreenState extends State<AboutScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: AppTheme.primary , size: 50,),
           onPressed: () {
-            Navigator.pushReplacementNamed(context, "/home"); // يرجع للصفحة السابقة
+            Navigator.pushReplacementNamed(context, "/home");
           },
         ),
         backgroundColor: Colors.white,
