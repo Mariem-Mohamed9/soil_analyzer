@@ -31,15 +31,14 @@ class LatestAnalysisItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         child: Row(
           children: [
-            // 1. جزء الصورة (ممتد بالكامل للحافة اليسرى والسفلية)
-            // ✅ تم إزالة الـ Padding والـ Container المربع لتمتد الصورة
+
             SizedBox(
-              width: cardWidth * 0.40, // الصورة تأخذ 40% من عرض الكارت
-              height: double.infinity, // تمتد للطول بالكامل
+              width: cardWidth * 0.40,
+              height: double.infinity,
               child: (item.imageUrl != null && item.imageUrl!.isNotEmpty)
                   ? Image.network(
                 item.imageUrl!,
-                fit: BoxFit.cover, // ✅ تملأ الـ Container بالكامل مع القص
+                fit: BoxFit.cover,
               )
                   : Container(
                 color: Colors.grey,
@@ -47,18 +46,18 @@ class LatestAnalysisItem extends StatelessWidget {
               ),
             ),
 
-            // 2. جزء البيانات (Bullet Points كما في الـ Mockup)
+
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(12.0), // Padding فقط للبيانات
+                padding: const EdgeInsets.all(12.0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center, // توسيط البيانات رأسياً
-                  crossAxisAlignment: CrossAxisAlignment.start, // محاذاة البيانات لليسار
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildDataRow("Soil Type", item.soilType),
                     _buildDataRow("Color", item.color ?? "N/A"),
-                    _buildDataRow("pH", "${item.ph.toString()} "), // مثال على الـ Optimal
-                    _buildDataRow("Moisture", "${item.moisture}%"), // مثال على الـ Good
+                    _buildDataRow("pH", "${item.ph.toString()} "),
+                    _buildDataRow("Moisture", "${item.moisture}%"),
                   ],
                 ),
               ),

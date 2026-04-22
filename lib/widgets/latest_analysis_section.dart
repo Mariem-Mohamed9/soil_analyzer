@@ -9,12 +9,12 @@ class LatestAnalysisSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // استخدمنا ارتفاع ثابت ومحدد لمنع مشاكل الـ Overflow (Render pixels)
+
     return Container(
       height: 160,
       width: double.infinity,
       decoration: BoxDecoration(
-        // إضافة الـ Shadow الخفيف للسيكشن بالكامل بدل الخلفية الخضراء
+
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.02),
@@ -26,7 +26,6 @@ class LatestAnalysisSection extends StatelessWidget {
       child: ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         scrollDirection: Axis.horizontal,
-        // أضفنا Physics لجعل السكرول أنعم
         physics: const BouncingScrollPhysics(),
         itemCount: historyList.length,
         itemBuilder: (context, index) {
