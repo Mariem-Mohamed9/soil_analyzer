@@ -10,6 +10,7 @@ class SoilResultData {
   final String quality;
   final List<String> bestCrops;
   final String dateTime;
+  final bool isExist;
 
   SoilResultData({
     this.image,
@@ -21,13 +22,12 @@ class SoilResultData {
     required this.quality,
     required this.bestCrops,
     required this.dateTime,
+    required this.isExist,
   });
 
   factory SoilResultData.fromJson(Map<String, dynamic> json) {
 
     String type = json['soil_type'] ?? 'Unknown';
-
-
     String color;
     if (type == "Clay") {
       color = "Black";
@@ -37,23 +37,28 @@ class SoilResultData {
       color = "Brown";
     }
 
+
+    bool alreadyExist = false;
+    if (json['source'] != null && json['source']['type'] == 'history') {
+      alreadyExist = true;
+    }
+
     return SoilResultData(
       soilType: type,
       color: color,
-
-
       ph: json['ph']?.toString() ?? '0.0',
       moisture: json['moisture']?.toString() ?? '0',
-
       quality: json['soil_quality'] ?? 'N/A',
 
 
-      bestCrops: json['best_crops'] != null
-          ? List<String>.from(json['best_crops'])
-          : (json['crop'] != null ? [json['crop'].toString()] : []),
+      bestCrops: json['crop'] != null
+          ? [json['crop'].toString()]
+          : (json['best_crops'] != null ? List<String>.from(json['best_crops']) : []),
 
-      dateTime: json['created_at'] ?? json['date_time'] ?? '',
+
+      dateTime: json['source'] != null ? json['source']['timestamp'] : (json['created_at'] ?? ''),
       imageUrl: json['image_url'],
+      isExist: alreadyExist,
     );
   }
-  }
+}

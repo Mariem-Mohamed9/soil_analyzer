@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-// تأكدي من مسار الصفحة المستقبلة
 import 'package:soil_analyzer/screens/soil_confirmation_screen.dart';
 import 'package:soil_analyzer/widgets/app_theme.dart';
 
@@ -20,7 +19,7 @@ class _CameraScreenState extends State<CameraScreen> {
   @override
   void initState() {
     super.initState();
-    // بنستدعي الكاميرا أول ما الصفحة تفتح
+
     WidgetsBinding.instance.addPostFrameCallback((_) => openCamera());
   }
 
@@ -74,7 +73,6 @@ class _CameraScreenState extends State<CameraScreen> {
 
             const SizedBox(height: 12),
 
-            // زرار التأكيد والانتقال للصفحة التانية
             if (capturedImage != null)
               ElevatedButton(
                 onPressed: () {
@@ -96,7 +94,6 @@ class _CameraScreenState extends State<CameraScreen> {
 
             const SizedBox(height: 16),
 
-            // زرار إعادة التصوير
             OutlinedButton(
               onPressed: openCamera,
               style: OutlinedButton.styleFrom(

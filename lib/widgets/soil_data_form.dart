@@ -37,7 +37,7 @@ class _SoilDataFormState extends State<SoilDataForm> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
-              ///  Soil Color (يتعرض حسب الشرط)
+
               if (widget.showColor) ...[
                 Text(
                   "Soil Color",
@@ -80,7 +80,7 @@ class _SoilDataFormState extends State<SoilDataForm> {
                 SizedBox(height: 20),
               ],
 
-              /// Moisture
+              
               Text("Moisture %",
                   style: TextStyle(
                       fontSize: 16, fontWeight: FontWeight.bold)),

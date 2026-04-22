@@ -15,7 +15,7 @@ class PageViewItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:  EdgeInsets.all(24),
+      padding: EdgeInsets.all(24),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -83,8 +83,10 @@ class PageViewItem extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              onPressed: () => onButtonPressed("Finish"),
-              child: const Text(
+              onPressed: (){
+                Navigator.pushReplacementNamed(context,"/home");
+              },
+              child: Text(
                 "Skip",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
