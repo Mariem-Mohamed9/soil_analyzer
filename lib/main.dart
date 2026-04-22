@@ -6,9 +6,8 @@ import 'package:soil_analyzer/screens/data_manually_screen.dart';
 import 'package:soil_analyzer/screens/history_screen.dart';
 import 'package:soil_analyzer/screens/home_screen.dart';
 import 'package:soil_analyzer/screens/onboarding_screen.dart';
-import 'package:soil_analyzer/screens/soil_confirmation_screen.dart';
 import 'package:soil_analyzer/widgets/app_theme.dart';
-import 'package:soil_analyzer/widgets/latest_analysis_section.dart';
+
 void main() {
   runApp(SoilAnalyzer());
 }
