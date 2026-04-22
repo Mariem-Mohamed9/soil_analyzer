@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Stack(
         children: [
-          // ✅ تم تعديل الـ Padding الخارجي لتقليل الـ Overflow
+
           Padding(
             padding: const EdgeInsets.fromLTRB(25, 10, 25, 0),
             child: SingleChildScrollView(
@@ -145,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                    SizedBox(height: 50),
 
-                  // ✅ العناوين ثابتة في الصفحة دائماً
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -164,21 +164,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                    SizedBox(height: 20),
 
-                  // ✅ الـ List فقط هي التي تظهر بعد تسجيل أول عملية
+
                   FutureBuilder<List<HistoryItem>>(
                     future: HistoryService().fetchHistory(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                         return LatestAnalysisSection(historyList: snapshot.data!.take(5).toList());
                       }
-                      // لو مفيش بيانات، بنعرض مساحة فاضية أو رسالة بسيطة
+
                       return  SizedBox(
                         height: 100,
                         child: Center(child: Text("History will appear here", style: TextStyle(color: Colors.grey))),
                       );
                     },
                   ),
-                   SizedBox(height: 30), // مساحة أمان في النهاية
+                   SizedBox(height: 30),
                 ],
               ),
             ),
